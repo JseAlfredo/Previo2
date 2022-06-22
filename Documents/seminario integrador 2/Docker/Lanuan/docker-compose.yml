@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  app-lanuan:
+    image: 'lanuan:latest'
+    build:
+      context: .
+    container_name: app-lanuan
+    depends_on:
+      - db-lanuan
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-lanuan:5432/db-lanuan?useSSL=false&serverTimezone=UTC&useUnicode=true&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=farid417
+      - SPRING_DATASOURCE_PASSWORD=Roger123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+    ports:
+      - 8080:8080
+  
+  db-lanuan:
+    image: 'postgres:13.1-alpine'
+    container_name: db-lanuan
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=db-lanuan
+      - DB_HOST=db-lanuan
+      - DB_PORT=5432
+      - POSTGRES_USER=farid417
+      - POSTGRES_PASSWORD=Roger123
+    volumes:
+      - db_data_lanuan:/var/lib/postgresql/data/pgdata
+
+volumes:
+  db_data_lanuan:
+    external: true
